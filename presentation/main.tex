@@ -1,33 +1,47 @@
-\documentclass{beamer}
+\documentclass[aspectratio=169]{beamer}
 \usetheme{Boadilla}
 \setbeamertemplate{navigation symbols}{}
 \usepackage{graphicx} % Required for inserting images
 \graphicspath{{./figures}}
 \usepackage[autostyle=true]{csquotes}
 \usepackage[T2A]{fontenc}
-%\usepackage{hyphenat}
 \usepackage[english, russian]{babel}
 
 \title{Interactive Speaker Recognition}
 \subtitle{Применение обучения с подкреплением для решения задачи распознавания
           диктора}
 \author[В.С.~Головин]{Вячеслав Головин \texorpdfstring{\newline}{, }
-    {\small Александр Самарин (руководитель)}}
+    {\small Евгений Шуранов (руководитель)}}
 \institute[ВШЭ]{Huawei CBG AI и ФКН ВШЭ СПб}
-\date{11.04.2023}
+\date{10.05.2023}
+
+\newcommand{\guesser}{\texttt{Guesser}}
+\newcommand{\enquirer}{\texttt{Enquirer}}
 
 \begin{document}
 
 \frame{\titlepage}
 
-\begin{frame}{Мотивация}
+\begin{frame}{}
     \textbf{Задача:} повышение точности систем верификации / идентификации
-    диктора без использования длинных или строго фиксированных
-    аудиозаписей.\vspace{1em}
+    диктора. Такая система может, например, быть использована для подтверждение
+    личности на мобильных устройствах.\vspace{1em}
 
-    \textbf{Предлагаемое решение:} использование агента, выбирающего в
-    зависимости от контекста, какое слово должен произнести диктор. Для обучения
-    агента предлагается использовать reinforcement learning (RL).
+    \textbf{Требования к системе:}
+    \begin{itemize}
+        \item короткие запросы (не раздражаем пользователя),
+        \item разнообразные запросы (не боимся спуфинга),
+        \item высокая точность (без комментариев).
+    \end{itemize}\vspace{1em}
+
+    \textbf{Предлагаемое решение:} использование RL-агента для выбора
+    запрашиваемых слов.\vspace{1em}
+
+    \textbf{Новизна дипломной работы:}
+    \begin{itemize}
+        \item переход от идентификации к верификации,
+        \item более гибкая система для выбора слов.
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Interactive Speaker Recognition}
@@ -44,14 +58,13 @@
     \end{figure}
 
     \column{0.4\textwidth}
-    \textbf{SR Module} состоит из 2 частей:
-    \begin{itemize}
-        \item \textbf{Guesser} выполняет идентификацию, обучается с помощью
-              supervised learning.
-        \item \textbf{Enquirer} запрашивает слова, обучается с помощью
-              reinforcement learning.
-    \end{itemize}
-    
+    Важные особенности:
+    \begin{enumerate}
+        \item Рассматривается только задача идентификации.
+        \item Набор слов строго фиксирован.
+        \item Разные нейронные сети для двух задач SR Module --- запроса слов
+        (\enquirer) и идентификации диктора (\guesser).
+    \end{enumerate}
     \end{columns}
 \end{frame}
 
@@ -61,7 +74,7 @@
     
     \column{0.6\textwidth}
     \begin{figure}[bht]
-    \includegraphics[width=.9\textwidth]{guesser.png}
+    \includegraphics[width=.8\textwidth]{guesser.png}
     % \caption{Архитектура блока Guesser}
     \end{figure}
 
@@ -78,7 +91,6 @@
         \item вероятности
             $\{P(g_i = g^*) \;|\; i=1..K\}$
     \end{itemize}
-    
     \end{columns}
 
     \begin{block}{Обозначения}
@@ -91,16 +103,7 @@
 
 \begin{frame}[fragile]{Блок Guesser}
 \framesubtitle{Псевдокод 1 итерации обучения}
-\begin{verbatim}
-speaker_ids = speakers.sample(size=K)
-G = voice_prints.get(speaker_ids)
-target = randrange(0, K)
-word_inds = randrange(0, V, size=T)
-X = word_vocab.get(speaker=speaker_ids[target],
-                   words=word_inds)
-prediction = guesser.forward(G, X)
-loss = cross_entropy(prediction, target)
-\end{verbatim}
+\input{guesser_forward.tex}
     \begin{block}{Обозначения}
     \begin{tabular}{l l}
         $K$ & количество гостей / дикторов\\
@@ -147,27 +150,7 @@ loss = cross_entropy(prediction, target)
 \begin{frame}[fragile]{Блок Enquirer}
 \framesubtitle{Псевдокод 1 эпизода ISR-игры}
 \footnotesize
-\begin{verbatim}
-speaker_ids = speakers.sample(size=K)
-G = voice_prints.get(speaker_ids)
-target = randrange(0, K)
-
-g_hat = G.mean(dim=0)
-x_i = start_tensor
-X = []
-for i in range(T):
-    probs = enquirer.forward(g_hat, x_i)
-    if training:
-        distribution = multinomial(probs)
-        word_ind = distribution.sample()
-    else:
-        word_ind = argmax(probs)
-    x_i = word_vocab.get(speaker=speaker_ids[target], word=word_ind)
-    X.append(x_i)
-
-prediction = guesser.predict(G, X)
-reward = 1 if prediction == target else 0
-\end{verbatim}
+\input{enquirer_forward.tex}
 \end{frame}
 
 \begin{frame}{Входные данные}
@@ -188,6 +171,7 @@ reward = 1 if prediction == target else 0
 \end{frame}
 
 \begin{frame}{Результаты из статьи}
+    \framesubtitle{$K = 5$ дикторов и $T = 3$ слова}
     \begin{figure}[htb]
     \only<1>{\includegraphics[scale=0.5]{isr_training.png}}
     \only<2>{\includegraphics[scale=0.5]{isr_word_sweep.png}}
@@ -200,6 +184,14 @@ reward = 1 if prediction == target else 0
         \item <2-> Преимущество RL-агента невелико и проявляется только при
         небольшом числе запрашиваемых слов.
     \end{itemize}
+\end{frame}
+
+\begin{frame}{Воспроизведение результатов}
+    Основная возникшая проблема --- размерность эмбеддингов. В статье
+    используются 128-мерные эмбеддинги, в то время как использованная для их
+    извлечения нейросеть имеет только 512-мерные выходы.
+
+    Информации о способе понижения размерности в статье нет. При этом
 \end{frame}
 
 \begin{frame}{Извлечение эмбеддингов}
