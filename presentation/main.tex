@@ -172,100 +172,41 @@
 
 \begin{frame}{Результаты из статьи}
     \framesubtitle{$K = 5$ дикторов и $T = 3$ слова}
-    \begin{figure}[htb]
-    \only<1>{\includegraphics[scale=0.5]{isr_training.png}}
-    \only<2>{\includegraphics[scale=0.5]{isr_word_sweep.png}}
-    \end{figure}
-
-    \begin{itemize}
-        \item <1->  RL-агент при выборе запрашиваемых слов учитывает контекст ---
-        он опережает не только случайного агента, но и эвристического,
-        выбирающего из подмножества ``лучших'' слов.
-        \item <2-> Преимущество RL-агента невелико и проявляется только при
-        небольшом числе запрашиваемых слов.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Воспроизведение результатов}
-    Основная возникшая проблема --- размерность эмбеддингов. В статье
-    используются 128-мерные эмбеддинги, в то время как использованная для их
-    извлечения нейросеть имеет только 512-мерные выходы.
-
-    Информации о способе понижения размерности в статье нет. При этом
-\end{frame}
-
-\begin{frame}{Извлечение эмбеддингов}
-\begin{block}{Цитата из статьи}
-    We use MFCCs of dimension 20 with a frame-length of 25ms, mean-normalized
-    over a sliding window of three seconds. We then process the MFCCs features
-    through a pretrained X-Vector network to obtain a high quality voice
-    embedding of fixed dimension 128 [\ldots].
-    \end{block}
-
-    \begin{itemize}
-        \item У данной нейросети есть только 512-мерные выходы.
-        \item При обучении нейросети в \texttt{kaldi} выходы нейросети
-              подвергаются обработке --- вычитается среднее по всем дикторам и
-              понижается размерность с помощью LDA\@.
-        \item Мои попытки выполнять подобную постообработку с помощью
-              \texttt{sklearn} / \texttt{numpy} заканчивались неудачей --- при
-              обучении \texttt{guesser} отсутствовала генерализация.
-        \item \textbf{Итог}: я использовал 512-мерные эмбеддинги, получаемые
-        напрямую с выходов нейросети.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Обучение Guesser --- первые результаты}
-    \framesubtitle{$K = 5$ дикторов и $T = 3$ слова}
-    \begin{figure}
+    \begin{columns}
         \centering
-        \includegraphics[scale=0.4]{guesser_training_v1.png}
-        % \caption{Обучение guesser -- первые результаты}
-    \end{figure}
+        \column{.5\textwidth}
+        \includegraphics[scale=0.5]{isr_training.png}
+        \column{.5\textwidth}
+        \includegraphics[scale=0.5]{isr_word_sweep.png}
+    \end{columns}\vspace*{1em}
 
-    Увеличение размерности эмбеддингов $d$ со 128 до 512 позволило существенно улучшить точность ($\sim$80\% вместо 74.1\% в оригинальной статье).
+    RL-агент при выборе запрашиваемых слов учитывает контекст --- он опережает
+    не только случайного агента, но и эвристического, выбирающего из
+    подмножества ``лучших'' слов.\vspace*{1em}
+
+    Преимущество RL-агента невелико и проявляется только при небольшом числе
+    запрашиваемых слов.
 \end{frame}
 
-\begin{frame}{Обучение Enquirer --- первые результаты}
-    \framesubtitle{$K = 5$ дикторов и $T = 3$ слова}
-    \begin{figure}
+\begin{frame}{Обучение и тестирование \guesser{}}
+    \framesubtitle{$K = 5$ дикторов  и $T = 3$ слов при обучении}
+    \begin{columns}
         \centering
-        \includegraphics[scale=0.4]{enquirer_training_v1.png}
-        % \caption{Обучение enquirer -- первые результаты}
-    \end{figure}
-    \begin{itemize}
-        \item Точность ниже, чем в статье (88.6\%), но явно есть возможность её
-        улучшить.
-        \item Обучение с помощью PPO, награда $R=1$ выдается в том случае, когда
-        в конце эпизода guesser правильно угадывает диктора.
-    \end{itemize}
+        \column{.5\textwidth}
+        \includegraphics[width=.95\textwidth]{../plots/word_sweep.pdf}
+        \column{.5\textwidth}
+        \includegraphics[width=.95\textwidth]{../plots/guest_sweep.pdf}
+    \end{columns}\vspace*{1em}
+
+    Вероятно, главная причина расхождения результатов --- увеличение размерности
+    эмбеддингов (512 вместо 128 в статье). Неизвестно, как и зачем в статье
+    производилось понижение размерности.
 \end{frame}
 
-\begin{frame}{Обучение Guesser --- подбор гиперпараметров}
-    \framesubtitle{$K = 5$ дикторов и $T = 3$ слова}
-    Средняя награда (точность) на валидационной выборке:
-    \begin{figure}
-        \centering
-        \includegraphics[width=.7\textwidth]{guesser_hpo.png}
-        % \caption{Оптимизация LR и размера батча}
-    \end{figure}
-    \begin{itemize}
-        \item Такая же точность достигается и на тестовой выборке.
-        \item Обучение enquirer позволяет увеличить точность до 96\%.
-    \end{itemize}
+\begin{frame}{Обучение и тестирование \enquirer{}}
 \end{frame}
 
-\begin{frame}{Дальнейшие планы}
-    \begin{itemize}
-        \item Оптимизация гиперпараметров и доработка enquirer.
-        \item Реализация эвристических агентов и сравнение их с нейросетевой
-              моделью.
-        \item Проведение экспериментов в более тяжёлых режимах (больше дикторов,
-              меньше слов).
-        \item Использование других эмбеддингов.
-        \item Исследование робастности модели.
-        \item Эксперименты с архитектурой enquirer / guesser.
-    \end{itemize}
+\begin{frame}{Эвристический агент}
 \end{frame}
 
 \end{document}
