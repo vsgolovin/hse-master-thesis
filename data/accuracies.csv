@@ -1,0 +1,6 @@
+model,acc,std
+guesser_5-3,0.935,0.003
+guesser_20-2,0.948,0.002
+verifier_3,0.91,0.005
+enquirer_5-3_5-3,0.975,0.006
+enquirer_5-3_20-2,0.983,0.001
