@@ -224,4 +224,24 @@
     \end{columns}
 \end{frame}
 
+\begin{frame}{Верификация}
+    \framesubtitle{Как преобразовать \guesser}
+
+    \begin{columns}
+        \column{0.6\textwidth}
+        \begin{figure}[bht]
+        \includegraphics[width=.8\textwidth]{guesser.png}
+        \end{figure}
+
+        \column{0.4\textwidth}
+        \begin{itemize}
+            \item только 1 диктор $\implies$ $\hat{g} = g_0$
+            \item \texttt{softmax} $\rightarrow$ \texttt{sigmoid} 
+            \item при $T = 3$ точность 0.91\\($\sim$ как в классификации с
+                  $K = 7$ гостями)
+            \item \texttt{MLP} $\rightarrow$ \texttt{CosineSimilarity} тоже работает, но хуже
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
 \end{document}
