@@ -10,6 +10,7 @@ MPL_RCPARAMS = {
     "figure.dpi": 300,
     "legend.frameon": False,
     "lines.linewidth": 1.0,
+    "lines.markersize": 3.0,
     "font.size": 8.0,
     "text.usetex": False,
     "xtick.direction": "in",
