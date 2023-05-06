@@ -17,6 +17,7 @@
 
 \newcommand{\guesser}{\texttt{Guesser}}
 \newcommand{\enquirer}{\texttt{Enquirer}}
+\newcommand{\imgscale}{0.8}
 
 \begin{document}
 
@@ -193,9 +194,9 @@
     \begin{columns}
         \centering
         \column{.5\textwidth}
-        \includegraphics[width=.95\textwidth]{../plots/word_sweep.pdf}
+        \includegraphics[scale=\imgscale]{../plots/word_sweep.pdf}
         \column{.5\textwidth}
-        \includegraphics[width=.95\textwidth]{../plots/guest_sweep.pdf}
+        \includegraphics[scale=\imgscale]{../plots/guest_sweep.pdf}
     \end{columns}\vspace*{1em}
 
     Вероятно, главная причина расхождения результатов --- увеличение размерности
@@ -208,24 +209,45 @@
     \begin{columns}
         \centering
         \column{.5\textwidth}
-        \includegraphics[width=.95\textwidth]{../plots/word_sweep_enq.pdf}
+        \includegraphics[scale=\imgscale]{../plots/word_sweep_enq.pdf}
         \column{.5\textwidth}
-        \includegraphics[width=.95\textwidth]{../plots/guest_sweep_enq.pdf}
+        \includegraphics[scale=\imgscale]{../plots/guest_sweep_enq.pdf}
     \end{columns}\vspace*{1em}
-
-
+    Для обучения использовалась \textbf{PPO}. Выбор слова при обучении и
+    тестировании проводился по-разному:
+    \begin{itemize}
+        \item \texttt{train} --- сэмплирование из распределения,
+        \item \texttt{test} --- $\arg \max$ по не использованным ранее словам.
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Эвристический агент}
-    \begin{columns}
+    \framesubtitle{Алгоритм работы}
+    \begin{columns}[c]
         \column{.3\textwidth}
         \includegraphics[height=.8\textheight]{../plots/word_scores.pdf}
         \column{.7\textwidth}
         \begin{center}
-            \includegraphics[width=0.8\textwidth]{../plots/word_sweep_heuristic.pdf}
+            \includegraphics[scale=\imgscale]{../plots/heuristic.pdf}
         \end{center}
+        \begin{enumerate}
+            \item Рассчитываем точность на валидационной выборке.
+            \item Сэмплируем из слов с самой высокой точностью.
+        \end{enumerate}
     \end{columns}
 \end{frame}
+
+\begin{frame}{Эвристический агент}
+    \framesubtitle{Сравнение с \enquirer}
+    \begin{columns}
+        \centering
+        \column{.5\textwidth}
+        \includegraphics[scale=\imgscale]{../plots/word_sweep_heuristic.pdf}
+        \column{.5\textwidth}
+        \includegraphics[scale=\imgscale]{../plots/guest_sweep_heuristic.pdf}
+    \end{columns}\vspace*{1em}
+\end{frame}
+
 
 \begin{frame}{Верификация}
     \framesubtitle{Как преобразовать \guesser}
@@ -242,7 +264,8 @@
             \item \texttt{softmax} $\rightarrow$ \texttt{sigmoid} 
             \item при $T = 3$ точность 0.91\\($\sim$ как в классификации с
                   $K = 7$ гостями)
-            \item \texttt{MLP} $\rightarrow$ \texttt{CosineSimilarity} тоже работает, но хуже
+            \item \texttt{MLP} $\rightarrow$ \texttt{CosineSimilarity} тоже
+                  работает, но хуже
         \end{itemize}
     \end{columns}
 \end{frame}

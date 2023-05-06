@@ -47,5 +47,19 @@ def enquirer():
     fig.savefig("plots/guest_sweep_enq.pdf")
 
 
+@cli.command()
+def heuristic():
+    df_e = pd.read_csv("data/guest_sweep_enq_ee.csv")
+    df_g = pd.read_csv("data/guest_sweep_heuristic.csv")
+    fig, ax = get_figure_axes(r"Количество дикторов $K$",
+                              r"Точность SR Module ($T = 3$)")
+    ax.plot(df_e["K"], df_e["acc"], label="Enquirer")
+    ax.plot(df_g["K"], df_g["acc"], label="эвристика (4 слова)")
+    ax.legend()
+    ax.set_ylim(0.75, 1.0)
+    ax.set_yticks(np.arange(0.75, 1.01, 0.05))
+    fig.savefig("plots/guest_sweep_heuristic.pdf")
+
+
 if __name__ == "__main__":
     cli()
