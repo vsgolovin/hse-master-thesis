@@ -6,6 +6,8 @@
 \usepackage[autostyle=true]{csquotes}
 \usepackage[T2A]{fontenc}
 \usepackage[english, russian]{babel}
+\usepackage{booktabs}
+\usepackage{multirow}
 
 \title{Interactive Speaker Recognition}
 \subtitle{Применение обучения с подкреплением для решения задачи распознавания
@@ -189,7 +191,7 @@
     запрашиваемых слов.
 \end{frame}
 
-\begin{frame}{Обучение и тестирование \guesser{}}
+\begin{frame}[t]{Обучение и тестирование \guesser{}}
     \framesubtitle{$K = 5$ дикторов  и $T = 3$ слова при обучении}
     \begin{columns}
         \centering
@@ -204,7 +206,7 @@
     производилось понижение размерности.
 \end{frame}
 
-\begin{frame}{Обучение и тестирование \enquirer{}}
+\begin{frame}[t]{Обучение и тестирование \enquirer{}}
     \framesubtitle{$K = 5$ дикторов  и $T = 3$ слова при обучении}
     \begin{columns}
         \centering
@@ -223,21 +225,21 @@
 
 \begin{frame}{Эвристический агент}
     \framesubtitle{Алгоритм работы}
-    \begin{columns}[c]
+    \begin{columns}[b]
         \column{.3\textwidth}
         \includegraphics[height=.8\textheight]{../plots/word_scores.pdf}
         \column{.7\textwidth}
-        \begin{center}
-            \includegraphics[scale=\imgscale]{../plots/heuristic.pdf}
-        \end{center}
         \begin{enumerate}
             \item Рассчитываем точность на валидационной выборке.
             \item Сэмплируем из слов с самой высокой точностью.
         \end{enumerate}
+        \begin{center}
+            \includegraphics[scale=\imgscale]{../plots/heuristic.pdf}
+        \end{center}
     \end{columns}
 \end{frame}
 
-\begin{frame}{Эвристический агент}
+\begin{frame}[t]{Эвристический агент}
     \framesubtitle{Сравнение с \enquirer}
     \begin{columns}
         \centering
@@ -246,8 +248,13 @@
         \column{.5\textwidth}
         \includegraphics[scale=\imgscale]{../plots/guest_sweep_heuristic.pdf}
     \end{columns}\vspace*{1em}
+    \begin{itemize}
+        \item Обучение в режиме с $K = 5$ дикторами и $T = 3$ запрашиваемыми
+              словами.
+        \item При $T = 1$ \enquirer{} работает плохо.  Можно обучать на 1 слове,
+              но такая система плохо работает в других режимах.
+    \end{itemize}
 \end{frame}
-
 
 \begin{frame}{Верификация}
     \framesubtitle{Как преобразовать \guesser}
@@ -268,6 +275,76 @@
                   работает, но хуже
         \end{itemize}
     \end{columns}
+\end{frame}
+
+\begin{frame}{Верификация}
+    \framesubtitle{Как преобразовать \enquirer}
+    \begin{columns}
+        \column{0.6\textwidth}
+        \begin{figure}[bht]
+        \includegraphics[width=.9\textwidth]{enquirer.png}
+        \end{figure}
+
+        \column{0.4\textwidth}
+        \begin{itemize}
+            \item только 1 диктор $\implies$ $\hat{g} = g_0$
+            \item архитектуру менять не нужно
+            \item можно взять веса для идентификации
+        \end{itemize}\vspace{1em}
+
+        Результаты ($T = 3$ слова):
+        \begin{center}
+            \begin{tabular}{c c}
+                \toprule
+                Выбор слов & Точность\\
+                \midrule
+                случайный & 0.895\\
+                \enquirer{} & 0.933\\
+                эвристика & 0.917\\
+                \bottomrule
+            \end{tabular}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Обучение в более тяжелом режиме}
+    \only<1>{
+        \begin{table}[htb]
+            \begin{tabular}{c c c}
+                \toprule
+                Выбор слов & Режим обучения & Точность\\
+                \midrule
+                случайный & \multirow{3}{4em}{$K = 5$\newline$T = 3$} & 0.937 \\
+                \enquirer{} & & 0.982\\
+                эвристика & & 0.984\\
+                \midrule
+                случайный & \multirow{3}{4em}{$K = 20$\\$T = 2$} & 0.951 \\
+                \enquirer{} & & 0.989\\
+                эвристика & & 0.988\\
+                \bottomrule
+            \end{tabular}
+            \caption{Точность идентификации, $K = 5$ дикторов, $T = 3$
+                        запрашиваемых слова}
+        \end{table}
+    }
+    \only<2>{
+        \begin{table}[htb]
+            \begin{tabular}{c c c}
+                \toprule
+                Выбор слов & Режим обучения & Точность\\
+                \midrule
+                случайный & \multirow{3}{4em}{$T = 3$} & 0.895 \\
+                \enquirer{} & & 0.933\\
+                эвристика & & 0.917\\
+                \midrule
+                случайный & \multirow{3}{4em}{$T = 2$} & 0.913 \\
+                \enquirer{} & & 0.947\\
+                эвристика & & 0.945\\
+                \bottomrule
+            \end{tabular}
+            \caption{Точность верификации, $T = 3$ запрашиваемых слова}
+        \end{table}
+    }
 \end{frame}
 
 \end{document}

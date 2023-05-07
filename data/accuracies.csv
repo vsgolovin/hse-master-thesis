@@ -11,7 +11,7 @@ enquirer_20-2/guesser_20-2,0.9885,0.0004
 cb-enquirer_5-3/guesser_5-3,0.964,0.002
 cb-enquirer_20-2/guesser_20-2,0.9908,0.0007
 cb-enquirer_5-3_half/guesser_5-3,0.970,0.001
-cb-enquirer_5-3_half/guesser_5-3,0.980,0.001
+cb-enquirer_20-2_half/guesser_20-2,0.980,0.001
 enquirer_v-3/verifier_3,0.933,0.002
 enquirer_5-3/verifier_3,0.936,0.002
 enquirer_20-2/verifier_3,0.930,0.002
@@ -19,3 +19,7 @@ enquirer_v-3/verifier_2,0.934,0.002
 enquirer_v-2/verifier_2,0.947,0.002
 enquirer_5-3/verifier_2,0.948,0.002
 enquirer_20-2/verifier_2,0.944,0.002
+top3/verifier_3,0.917,0.001
+top3/verifier_2,0.945,0.001
+top3/guesser_5-3,0.982,0.001
+top3/guesser_20-2,0.9880,0.0004
