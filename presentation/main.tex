@@ -74,7 +74,7 @@
 \begin{frame}{Блок Guesser}
 \framesubtitle{Архитектура}
     \begin{columns}
-    
+ 
     \column{0.6\textwidth}
     \begin{figure}[bht]
     \includegraphics[width=.8\textwidth]{guesser.png}
@@ -324,7 +324,7 @@
                 \bottomrule
             \end{tabular}
             \caption{Точность идентификации, $K = 5$ дикторов, $T = 3$
-                        запрашиваемых слова}
+                     запрашиваемых слова}
         \end{table}
     }
     \only<2>{
@@ -345,6 +345,55 @@
             \caption{Точность верификации, $T = 3$ запрашиваемых слова}
         \end{table}
     }
+\end{frame}
+
+\begin{frame}{\texttt{CodebookEnquirer}}
+    \framesubtitle{Мотивация и принцип работы}
+    Очевидный недостаток архитектуры \enquirer{} --- строго фиксированный набор
+    слов, при любом его изменении нужно обучать заново или делать fine-tuning.
+    \vspace{1em}
+
+    \begin{columns}
+
+    \column{0.6\textwidth}
+    \begin{figure}[bht]
+    \includegraphics[width=.8\textwidth]{guesser.png}
+    \end{figure}
+
+    \column{0.4\textwidth}
+    Предлагаемые изменения:
+    \begin{itemize}
+        \item MLP возвращает эмбеддинг слова, а не вероятности;
+        \item добавляется \texttt{Codebook} --- набор (фиксированных)
+            эмбеддингов слов;
+        \item вероятность выбрать слово из \texttt{Codebook} обратно
+            пропорциональна расстоянию между эмбеддингами.
+    \end{itemize}
+
+    \end{columns}
+\end{frame}
+
+\begin{frame}{\texttt{CodebookEnquirer}}
+    \framesubtitle{Результаты}
+        \begin{table}[htb]
+            \begin{tabular}{c c c}
+                \toprule
+                Выбор слов & Режим обучения & Точность\\
+                \midrule
+                случайный & \multirow{4}{4em}{$K = 5$\\$T = 3$} & 0.937 \\
+                \enquirer{} & & 0.982 \\
+                \texttt{CodebookEnquirer} & & 0.964\\
+                \texttt{CodebookEnquirer} (половина слов) & & 0.970\\
+                \midrule
+                \enquirer{} & \multirow{4}{4em}{$K = 20$\\$T = 2$} & 0.951 \\
+                \enquirer{} & & 0.989\\
+                \texttt{CodebookEnquirer} & & 0.990\\
+                \texttt{CodebookEnquirer} (половина слов) & & 0.980\\
+                \bottomrule
+            \end{tabular}
+            \caption{Точность идентификации, $K = 5$ дикторов, $T = 3$
+                     запрашиваемых слова}
+        \end{table}
 \end{frame}
 
 \end{document}
