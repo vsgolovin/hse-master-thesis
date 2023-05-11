@@ -396,4 +396,26 @@
         \end{table}
 \end{frame}
 
+\begin{frame}{Добавление шума}
+    \begin{itemize}
+        \item 6 различных вариантов шума из датасета MUSAN для каждого слова:
+        \texttt{rain}, \texttt{car}, \texttt{crowd}, \texttt{typing},
+        \texttt{hum}, \texttt{white} --- а также исходная чистая аудиозапись.
+        \item SNR 3~dB.
+        \item Тип шума не меняется в течение игры.
+    \end{itemize}
+
+    \begin{table}[htb]
+        \begin{tabular}{c c c}
+            \toprule
+            Модель & Идентификация & Верификация\\
+            \midrule
+            \guesser{} & 0.887 & 0.895\\
+            \guesser{} + \enquirer{} & 0.946 & 0.934\\
+            \guesser{} + эвристика (3 лучших) & 0.957 & 0.938\\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}
+
 \end{document}

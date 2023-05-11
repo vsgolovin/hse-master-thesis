@@ -23,3 +23,9 @@ top3/verifier_3,0.917,0.001
 top3/verifier_2,0.945,0.001
 top3/guesser_5-3,0.982,0.001
 top3/guesser_20-2,0.9880,0.0004
+guesser_noise,0.887,0.002
+enquirer_noise/guesser_noise,0.946,0.001
+top3/guesser_noise,0.957,0.001
+verifier_noise,0.895,0.002
+enquirer_v-3_noise/verifier_noise,0.934,0.002
+top3/verifier_noise,0.9376,0.0005
