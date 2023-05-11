@@ -402,7 +402,7 @@
         \texttt{rain}, \texttt{car}, \texttt{crowd}, \texttt{typing},
         \texttt{hum}, \texttt{white} --- а также исходная чистая аудиозапись.
         \item SNR 3~dB.
-        \item Тип шума не меняется в течение игры.
+        \item Тип шума не меняется в течение эпизода.
     \end{itemize}
 
     \begin{table}[htb]
@@ -415,6 +415,8 @@
             \guesser{} + эвристика (3 лучших) & 0.957 & 0.938\\
             \bottomrule
         \end{tabular}
+        \caption{Точность идентификации и верификации в стандартных режимах
+        ($T = 3$ слова, $K = 5$ гостей при идентификации)}
     \end{table}
 \end{frame}
 
