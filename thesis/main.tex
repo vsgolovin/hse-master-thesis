@@ -1,0 +1,55 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{csquotes}
+\usepackage{graphicx}
+\usepackage[labelsep=period]{caption}
+\usepackage{float}
+\usepackage[bibencoding=auto,
+            backend=biber,
+            language=english,
+            style=numeric-comp,
+            bibstyle=ieee]{biblatex}
+\addbibresource{references.bib}
+
+\newcommand{\guesser}{\texttt{Guesser}}
+\newcommand{\enquirer}{\texttt{Enquirer}}
+\newcommand{\cbenquirer}{\texttt{CodebookEnquirer}}
+
+\author{Головин Вячеслав Сергеевич}
+\title{Использование обучения с подкреплением для решения задачи распознавания
+диктора в интерактивном режиме}
+\date{2023}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section*{Введение}\label{sec:intro}
+\addcontentsline{toc}{section}{\protect\numberline{}Введение}
+
+\input{intro.tex}
+
+\section{Распознавание диктора в интерактивном режиме}
+
+\input{ch1.tex}
+
+\section{Детали реализации и результаты}
+
+\input{ch2.tex}
+
+\section{Модификации метода}
+
+\input{ch3.tex}
+
+\section*{Заключение}
+\addcontentsline{toc}{section}{\protect\numberline{}Заключение}
+
+\input{conclusion.tex}
+
+\printbibliography[title=Список литературы]
+
+\end{document} % Конец текста.
