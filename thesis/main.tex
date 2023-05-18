@@ -13,6 +13,7 @@
             bibstyle=ieee]{biblatex}
 \addbibresource{references.bib}
 
+\newcommand{\citeisr}{\cite{isrpaper}}
 \newcommand{\xvector}{\texttt{x-vector}}
 \newcommand{\guesser}{\texttt{Guesser}}
 \newcommand{\enquirer}{\texttt{Enquirer}}
@@ -29,20 +30,21 @@
 
 \tableofcontents
 
+\newpage
 \section*{Введение}\label{sec:intro}
 \addcontentsline{toc}{section}{\protect\numberline{}Введение}
 
 \input{intro.tex}
 
-\section{Распознавание диктора в интерактивном режиме}
+\section{Распознавание диктора в интерактивном режиме}\label{sec:theory}
 
 \input{ch1.tex}
 
-\section{Детали реализации и результаты}
+\section{Детали реализации и результаты}\label{sec:experiments}
 
 \input{ch2.tex}
 
-\section{Модификации метода}
+\section{Модификации метода}\label{sec:modifications}
 
 \input{ch3.tex}
 
