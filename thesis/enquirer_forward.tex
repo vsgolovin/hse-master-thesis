@@ -1,0 +1,22 @@
+\begin{lstlisting}[caption={Интерактивная игра для обучения \enquirer{}}]
+speaker_ids = speakers.sample(size=K)
+G = voice_prints.get(speaker_ids)
+target = randrange(0, K)
+
+g_hat = G.mean(dim=0)
+x_i = start_tensor
+X = []
+for i in range(T):
+    probs = enquirer.forward(g_hat, x_i)
+    if training:
+        word_inds = multinomial(probs).sample()
+    else:
+        probs[previous_actions] = 0.0
+        word_ind = argmax(probs)
+    x_i = word_vocab.get(speaker=speaker_ids[target],
+                         word=word_ind)
+    X.append(x_i)
+
+prediction = guesser.predict(G, X)
+reward = 1 if prediction == target else 0
+\end{lstlisting}

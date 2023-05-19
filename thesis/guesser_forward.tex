@@ -1,0 +1,10 @@
+\begin{lstlisting}[caption={Рассчёт функции потерь \guesser{}}]
+speaker_ids = speakers.sample(size=K)
+G = voice_prints.get(speaker_ids)
+target = randrange(0, K)
+word_inds = randrange(0, V, size=T)
+X = word_vocab.get(speaker=speaker_ids[target],
+                   words=word_inds)
+probabilities = guesser.forward(G, X)
+loss = cross_entropy(probabilities, target)
+\end{lstlisting}
