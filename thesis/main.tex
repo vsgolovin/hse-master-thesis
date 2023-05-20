@@ -1,7 +1,7 @@
-\documentclass[a4paper,12pt]{article}
-\usepackage[T2A]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[english,russian]{babel}
+% \documentclass[a4paper,12pt]{article}
+\documentclass{spbau-diploma}
+% \usepackage[utf8]{inputenc}
+% \usepackage[english,russian]{babel}
 \usepackage{listings}
 \usepackage{verbatim}
 \usepackage{amsmath}
@@ -11,12 +11,6 @@
 \usepackage{graphicx}
 \usepackage[labelsep=period]{caption}
 \usepackage{float}
-\usepackage[bibencoding=auto,
-            backend=biber,
-            language=english,
-            style=numeric-comp,
-            bibstyle=ieee]{biblatex}
-\addbibresource{references.bib}
 
 \usepackage{soulutf8}
 \usepackage{color}
@@ -35,18 +29,44 @@
 
 \begin{document}
 
-\maketitle
+\filltitle{ru}{
+    chair              = {},
+    title              = {Использование обучения с подкреплением для решения задачи распознавания диктора в интерактивном режиме},
+    % Здесь указывается тип работы. Возможные значения:
+    %   coursework - Курсовая работа
+    %   diploma - Диплом специалиста
+    %   master - Диплом магистра
+    %   bachelor - Диплом бакалавра
+    type               = {master},
+    position           = {студент},
+    group              = 666,
+    author             = {Головин Вячеслав Сергеевич},
+    supervisorPosition = {к.\,т.\,н., доцент},
+    supervisor         = {Шуранов Е.\,В.},
+    reviewerPosition   = {м.н.с.},
+    reviewer           = {Рыжиков А.\,С.},
+    chairHeadPosition  = {hello},
+    chairHead          = {world},
+    university = {ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ АВТОНОМНОЕ ОБРАЗОВАТЕЛЬНОЕ
+    УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ «НАЦИОНАЛЬНЫЙ ИССЛЕДОВАТЕЛЬСКИЙ УНИВЕРСИТЕТ
+    «ВЫСШАЯ ШКОЛА ЭКОНОМИКИ»},
+    faculty = {Факультет Санкт-Петербургская школа физико-математических и компьютерных наук},
+    city = {Санкт-Петербург},
+    year             = {2023}
+}
+
+% \maketitle
 
 \tableofcontents
 
 \newpage
 \section*{Введение}\label{sec:intro}
-\addcontentsline{toc}{section}{\protect\numberline{}Введение}
 
 \input{intro.tex}
 
 \newpage
-\section{Распознавание диктора в интерактивном режиме}\label{sec:theory}
+\section{Распознавание диктора в интерактивном\\режиме}
+\label{sec:theory}
 
 \input{ch1.tex}
 
@@ -62,10 +82,9 @@
 
 \newpage
 \section*{Заключение}
-\addcontentsline{toc}{section}{\protect\numberline{}Заключение}
 
 \input{conclusion.tex}
 
-\printbibliography[title=Список литературы]
-
+\bibliographystyle{ieeetr}
+\bibliography{references.bib}
 \end{document} % Конец текста.
