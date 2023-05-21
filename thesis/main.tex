@@ -1,5 +1,5 @@
 % \documentclass[a4paper,12pt]{article}
-\documentclass{spbau-diploma}
+\documentclass[14pt]{spbau-diploma}
 % \usepackage[utf8]{inputenc}
 % \usepackage[english,russian]{babel}
 \usepackage{listings}
@@ -21,6 +21,9 @@
 \newcommand{\guesser}{\texttt{Guesser}}
 \newcommand{\enquirer}{\texttt{Enquirer}}
 \newcommand{\cbenquirer}{\texttt{Codebook\allowbreak{}Enquirer}}
+
+\DeclareMathOperator{\softmax}{\text{softmax}}
+\DeclareMathOperator{\sigmoid}{\text{sigmoid}}
 
 \author{Головин Вячеслав Сергеевич}
 \title{Использование обучения с подкреплением для решения задачи распознавания
@@ -65,7 +68,7 @@
 \input{intro.tex}
 
 \newpage
-\section{Распознавание диктора в интерактивном\\режиме}
+\section{Распознавание диктора в интерактивном режиме}
 \label{sec:theory}
 
 \input{ch1.tex}
