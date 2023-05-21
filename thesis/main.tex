@@ -61,14 +61,37 @@
 % \maketitle
 
 \begin{abstract}
-    аннотация на русском
+    Мы исследовали подход к решению задачи распознавания диктора в интерактивном
+    режиме. Его суть заключается в использовании обучения с подкреплением для
+    создания нейросетевого агента, выбирающего запрашиваемые у диктора слова
+    в зависимости от текущего контекста. Исследованный метод позволяет повысить
+    точность распознавания, однако преимущество над простым эвристическим
+    алгоритмом в среднем оказывается небольшим. Выполнена адаптация модели под
+    практическую задачу верификации пользователя, установлено, что внесенные
+    модификации не ведут к деградации результатов. Также установлено, что
+    использование других эмбеддингов и обучение модели в более тяжелом режиме
+    позволяет дополнительно повысить точность распознавания.
 \end{abstract}
+
+\textbf{Ключевые слова:} распознавание диктора, идентификация диктора,
+верификация диктора, глубокое обучение, обучение с подкреплением.
 
 \begin{otherlanguage}{english}
 \begin{abstract}
-    abstract in english
+    We study an interactive approach to speaker verification problem. Its main
+    idea is the use of reinforcement learning for training a neural network,
+    which selects the next requested word depending on the context. This method
+    allows for increasing recognition accuracy, however on average it only
+    slightly outperforms a simple heuristic algorithm. The model is adapted for
+    the practical speaker verification model, we show that the modifications we
+    introduct do not lead to performance degradation. We also show that the use
+    of different embeddings and training the model in more challenging settings
+    allows for a further increase in recognition accuracy.
 \end{abstract}
 \end{otherlanguage}
+
+\textbf{Keywords:} speaker recognition, speaker identification, speaker
+verification, deep learning, reinforcement learning.
 
 \newpage
 \tableofcontents
