@@ -16,6 +16,7 @@ def get_figure_axes(xlabel, ylabel):
     ax = fig.gca()
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
+    ax.text(0.015, 0.04, "(б)", transform=ax.transAxes)
     return fig, ax
 
 
@@ -41,7 +42,7 @@ def enquirer():
                               r"Точность SR Module ($T = 3$)")
     ax.plot(df_e["K"], df_e["acc"], label="Enquirer")
     ax.plot(df_g["K"], df_g["acc"], label="random agent")
-    ax.legend()
+    ax.legend(loc="lower center")
     ax.set_ylim(0.5, 1.0)
     ax.set_yticks(np.arange(0.5, 1.01, 0.1))
     fig.savefig("plots/guest_sweep_enq.pdf")

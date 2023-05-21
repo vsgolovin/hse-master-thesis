@@ -16,6 +16,7 @@ def get_figure_axes(xlabel, ylabel):
     ax = fig.gca()
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
+    ax.text(0.015, 0.91, "(а)", transform=ax.transAxes)
     return fig, ax
 
 
