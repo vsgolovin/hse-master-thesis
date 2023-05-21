@@ -1,7 +1,4 @@
-% \documentclass[a4paper,12pt]{article}
 \documentclass[14pt]{spbau-diploma}
-% \usepackage[utf8]{inputenc}
-% \usepackage[english,russian]{babel}
 \usepackage{listings}
 \usepackage{verbatim}
 \usepackage{amsmath}
@@ -11,6 +8,8 @@
 \usepackage{graphicx}
 \usepackage[labelsep=period]{caption}
 \usepackage{float}
+
+\setotherlanguage{english}
 
 \usepackage{soulutf8}
 \usepackage{color}
@@ -60,6 +59,17 @@
 
 % \maketitle
 
+\begin{abstract}
+    аннотация на русском
+\end{abstract}
+
+\begin{otherlanguage}{english}
+\begin{abstract}
+    abstract in english
+\end{abstract}
+\end{otherlanguage}
+
+\newpage
 \tableofcontents
 
 \newpage
@@ -68,8 +78,7 @@
 \input{intro.tex}
 
 \newpage
-\section{Распознавание диктора в интерактивном режиме}
-\label{sec:theory}
+\section{Распознавание диктора в интерактивном режиме}\label{sec:theory}
 
 \input{ch1.tex}
 
@@ -90,4 +99,4 @@
 
 \bibliographystyle{ieeetr}
 \bibliography{references.bib}
-\end{document} % Конец текста.
+\end{document}
