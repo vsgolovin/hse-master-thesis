@@ -1,0 +1,26 @@
+verification (2 words)
+cpc:
+    random: 0.95239 +- 0.00115
+    enquirer: 0.96582 +- 0.00131
+x-vector:
+    random: 0.88911 +- 0.00246
+    enquirer: 0.93592 +- 0.00134
+
+identification (20 speakers, 2 words)
+cpc:
+    random: 0.94607 +- 0.00142
+    enquirer: 0.98972 +- 0.00067
+x-vector:
+    random: 0.75460 +- 0.00270
+    enquirer: 0.91363 +- 0.00133
+
+identification (5 speakers, 3 words)
+cpc (trained with 20/2):
+    random: 0.99427 +- 0.00055
+    enquirer: 0.99810 +- 0.00021
+x-vector (trained with 20/2):
+    random: 0.951 +- 0.002
+    enquirer: 0.9885 +- 0.0004
+x-vector@128 (from paper):
+    random: 0.741 +- 0.002
+    enquier: 0.886 +- 0.005
