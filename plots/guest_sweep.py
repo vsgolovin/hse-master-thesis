@@ -36,7 +36,7 @@ def guesser():
 
 @cli.command()
 def enquirer():
-    df_e = pd.read_csv("data/guest_sweep_enq_ee.csv")
+    df_e = pd.read_csv("data/guest_sweep_enquirer.csv")
     df_g = pd.read_csv("data/guest_sweep.csv")
     fig, ax = get_figure_axes(r"Количество дикторов $K$",
                               r"Точность SR Module ($T = 3$)")
@@ -50,7 +50,7 @@ def enquirer():
 
 @cli.command()
 def heuristic():
-    df_e = pd.read_csv("data/guest_sweep_enq_ee.csv")
+    df_e = pd.read_csv("data/guest_sweep_enquirer.csv")
     df_g = pd.read_csv("data/guest_sweep_heuristic.csv")
     fig, ax = get_figure_axes(r"Количество дикторов $K$",
                               r"Точность SR Module ($T = 3$)")
