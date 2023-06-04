@@ -12,10 +12,10 @@
 \title{Interactive Speaker Recognition}
 \subtitle{Применение обучения с подкреплением для решения задачи распознавания
           диктора}
-\author[В.С.~Головин]{Вячеслав Головин \texorpdfstring{\newline}{, }
-    {\small Евгений Шуранов (руководитель)}}
+\author[В.С.~Головин]{Головин Вячеслав Сергеевич \texorpdfstring{\newline}{, }
+    {\small Шуранов Евгений Витальевич (руководитель)}}
 \institute[ВШЭ]{Huawei CBG AI и ФКН ВШЭ СПб}
-\date{16.05.2023}
+\date{07.06.2023}
 
 \newcommand{\guesser}{\texttt{Guesser}}
 \newcommand{\enquirer}{\texttt{Enquirer}}
@@ -85,7 +85,7 @@
     Speaker Recognition with Reinforcement Learning}, Mathieu Seurin et al.,
     INTERSPEECH 2020, arXiv:2008.03127v1.\vspace{1em}
 
-    Использовался датасет TIMIT\@.
+    Использовался датасет TIMIT (630 дикторов, 20 слов).\vspace{1em}
 
     \begin{columns}
 
@@ -173,41 +173,60 @@
 
 \begin{frame}[t]{Обучение и тестирование \guesser{}}
     \framesubtitle{$K = 5$ дикторов  и $T = 3$ слова при обучении}
-    \begin{columns}
+    \begin{columns}[T]
         \centering
         \column{.5\textwidth}
-        \includegraphics[scale=\imgscale]{../plots/old/word_sweep.pdf}
+        \mbox{\includegraphics[scale=\imgscale]{../plots/old/word_sweep.pdf}}
         \column{.5\textwidth}
-        \includegraphics[scale=\imgscale]{../plots/old/guest_sweep.pdf}
+        \mbox{\includegraphics[scale=\imgscale]{../plots/old/guest_sweep.pdf}}
     \end{columns}\vspace*{1em}
+    В качестве эмбеддингов использовались \textbf{x-vectors} из фреймворка
+    \textbf{Kaldi}.\vspace{1em}
 
     Вероятно, главная причина расхождения результатов --- увеличение размерности
-    эмбеддингов (512 вместо 128 в статье). Неизвестно, как и зачем в статье
-    производилось понижение размерности.
+    эмбеддингов (512 вместо 128). Как и зачем в статье производилось понижение
+    размерности неизвестно.
 \end{frame}
 
 \begin{frame}[t]{Обучение и тестирование \enquirer{}}
     \framesubtitle{$K = 5$ дикторов  и $T = 3$ слова при обучении}
-    \begin{columns}
+    \begin{columns}[T]
         \centering
         \column{.5\textwidth}
-        \only<1>{\includegraphics[scale=\imgscale]{../plots/old/word_sweep_enq.pdf}}
-        \only<2>{\includegraphics[scale=\imgscale]{../plots/old/word_sweep_heuristic.pdf}}
+        \mbox{\includegraphics[scale=\imgscale]{../plots/old/word_sweep_enq.pdf}}
         \column{.5\textwidth}
-        \only<1>{\includegraphics[scale=\imgscale]{../plots/old/guest_sweep_enq.pdf}}
-        \only<2>{\includegraphics[scale=\imgscale]{../plots/old/guest_sweep_heuristic.pdf}}
+        \mbox{\includegraphics[scale=\imgscale]{../plots/old/guest_sweep_enq.pdf}}
     \end{columns}\vspace*{1em}
-    Для обучения использовалась \textbf{PPO}. Выбор слова при обучении и
+
+    Для обучения использовался \textbf{PPO}. Выбор слова при обучении и
     тестировании проводился по-разному:
     \begin{itemize}
         \item \texttt{train} --- сэмплирование из распределения,
         \item \texttt{test} --- $\arg \max$ по не использованным ранее словам.
-    \end{itemize}
+    \end{itemize}\vspace{1em}
 
-    \only<2>{
-        Эвристический агент не обращает внимание на контекст и (практически)
-        всегда запрашивает одни и те же слова.
-    }
+    Награда: $1.0$ --- \guesser{} угадал диктора, $0.0$ --- иначе.
+\end{frame}
+
+\begin{frame}[t]{\enquirer{} против эвристики}
+    \framesubtitle{$K = 5$ дикторов  и $T = 3$ слова при обучении}
+    \begin{columns}[T]
+        \centering
+        \column{.5\textwidth}
+        \mbox{
+            \includegraphics[scale=\imgscale]{../plots/old/word_sweep_heuristic.pdf}%
+        }
+        \column{.5\textwidth}
+        \mbox{
+            \includegraphics[scale=\imgscale]{../plots/old/guest_sweep_heuristic.pdf}
+        }
+    \end{columns}\vspace*{1em}
+
+    Эвристический агент не обращает внимание на контекст и (практически) всегда
+    запрашивает одни и те же слова.\vspace{1em}
+
+    Для выбора слов используется средняя точность \guesser{} на валидационной
+    выборке при использовании этого слова.
 \end{frame}
 
 \begin{frame}{От идентификации к верификации}
@@ -242,7 +261,109 @@
         \end{columns}
 \end{frame}
 
-\begin{frame}{Обучение в более тяжелом режиме}
+
+\begin{frame}{Другие эксперименты}
+    \begin{enumerate}
+        \item Подбор режима обучения.
+        \begin{itemize}
+            \item Для улучшения точности можно обучать модели в более тяжелых
+            режимах (например, $K = 20$, $T = 2$).
+        \end{itemize}
+        \item \texttt{CodebookEnquirer} --- гибкая система выбора слов.
+        \begin{itemize}
+            \item Модифицируем \enquirer{} таким образом, что выбор осуществляется
+            не из фиксированного набора слов, а из списка эмбеддингов.
+            \item Работает (небольшое падение точности), даже если мы обучаем
+            и тестируем модель на разных наборах слов.
+        \end{itemize}
+
+        \item Добавление шума
+        \begin{itemize}
+            \item Добавляем к аудиозаписям слов 6 видов шума из MUSAN\@.
+            \item Не меняем тип шума в течение игры.
+            \item Результаты принципиально не изменяются.
+        \end{itemize}
+
+        \item Альтернативные эмбеддинги
+        \begin{itemize}
+            \item Вместо \textbf{x-vector} используем нейронную сеть, обученную
+            с помощью контрастного прогнозирующего кодирования (\textbf{CPC}).
+            \item Существенное увеличение точности, \enquirer{} обучается.
+        \end{itemize}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Выводы}
+    \begin{itemize}
+        \item Исследованный подход работает --- точность идентификации 
+        существенно повышается при добавлении выбирающего слова
+        агента.
+        \item Модель можно сделать практически полезной: легко перейти от
+        идентификации к верификации и от фиксированного набора слов к
+        произвольному.
+        \item В большинстве режимов (очень) простая эвристика оказывается не хуже
+        нейросетевого агента для выбора слов (\enquirer{}).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[noframenumbering, plain]{}
+    \centering
+    \Huge
+    Приложение
+\end{frame}
+
+\begin{frame}[noframenumbering, plain, fragile]{Псевдокод 1 итерации обучения
+                                                \guesser{}}
+\input{guesser_forward.tex}
+    \begin{block}{Обозначения}
+    \begin{tabular}{l l}
+        $K$ & количество гостей / дикторов\\
+        $T$ & количество запрашиваемых слов\\
+        $V$ & размер словаря --- число доступных для запроса слов
+    \end{tabular}
+    \end{block}
+\end{frame}
+
+\begin{frame}[noframenumbering, plain, fragile]{Псевдокод 1 эпизода ISR-игры}
+\footnotesize
+\input{enquirer_forward.tex}
+\end{frame}
+
+\begin{frame}[noframenumbering, plain]{Результаты из статьи}
+    \framesubtitle{$K = 5$ дикторов и $T = 3$ слова}
+    \begin{columns}
+        \centering
+        \column{.5\textwidth}
+        \includegraphics[scale=0.5]{isr_training.png}
+        \column{.5\textwidth}
+        \includegraphics[scale=0.5]{isr_word_sweep.png}
+    \end{columns}\vspace*{1em}
+
+    RL-агент при выборе запрашиваемых слов учитывает контекст --- он опережает
+    не только случайного агента, но и эвристического, выбирающего из
+    подмножества ``лучших'' слов.\vspace*{1em}
+
+    Преимущество RL-агента невелико и проявляется только при небольшом числе
+    запрашиваемых слов.
+\end{frame}
+
+\begin{frame}[noframenumbering, plain]{Эвристический агент}
+    \framesubtitle{Алгоритм работы}
+    \begin{columns}[b]
+        \column{.4\textwidth}
+        \includegraphics[height=.8\textheight]{../plots/word_scores.pdf}
+        \column{.6\textwidth}
+        \begin{enumerate}
+            \item Рассчитываем точность на валидационной выборке.
+            \item Сэмплируем из слов с самой высокой точностью.
+        \end{enumerate}
+        \begin{center}
+            \includegraphics[scale=\imgscale]{../plots/heuristic.pdf}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[noframenumbering, plain]{Обучение в более тяжелом режиме}
     \only<2>{
         \begin{table}[htb]
             \begin{tabular}{c c c}
@@ -282,44 +403,76 @@
     }
 \end{frame}
 
-\begin{frame}{Другие эксперименты}
-    \begin{enumerate}
-        \item \texttt{CodebookEnquirer} --- гибкая система выбора слов.
-        \begin{itemize}
-            \item Меняем последний слой \enquirer{}: теперь он выдает не вероятности
-            выбрать то или иное слово из словаря, а эмбеддинг.
-            \item Создаем \texttt{Codebook} --- набор эмбеддингов слов
-            (усредняем по обучающей выборке).
-            \item Для получения вероятностей считаем \texttt{softmax} с
-            отрицательной температурой от расстояний между выходным эмбеддингом
-            и эмбеддингами слов в \texttt{Codebook}.
-            \item Работает (небольшое падение точности), даже если мы обучаем
-            и тестируем модель на разных наборах слов.
-        \end{itemize}
+\begin{frame}[noframenumbering, plain]{\texttt{CodebookEnquirer}}
+    \framesubtitle{Мотивация и принцип работы}
+    Очевидный недостаток архитектуры \enquirer{} --- строго фиксированный набор
+    слов, при любом его изменении нужно обучать заново или делать fine-tuning.
+    \vspace{1em}
 
-        \item Добавление шума
-        \begin{itemize}
-            \item Добавляем к аудиозаписям слов 6 видов шума из MUSAN\@.
-            \item Не меняем тип шума в течение игры.
-            \item Не помогает \enquirer{} опережать эвристику.
-        \end{itemize}
-    \end{enumerate}
-\end{frame}
+    \begin{columns}
 
-\begin{frame}{Выводы}
+    \column{0.5\textwidth}
+    \begin{figure}[bht]
+    \includegraphics[width=\textwidth]{guesser.png}
+    \end{figure}
+
+    \column{0.5\textwidth}
+    Предлагаемые изменения:
     \begin{itemize}
-        \item Исследованный подход работает --- точность идентификации 
-        существенно повышается при добавлении выбирающего слова
-        агента.
-        \item Модель можно сделать практически полезной: легко перейти от
-        идентификации к верификации и от фиксированного набора слов к
-        произвольному.
-        \item В большинстве режимов (очень) простая эвристика оказывается не хуже
-        нейросетевого агента для выбора слов (\enquirer{}).
+        \item MLP возвращает эмбеддинг слова, а не вероятности;
+        \item добавляется \texttt{Codebook} --- набор (фиксированных)
+            эмбеддингов слов;
+        \item вероятность выбрать слово из \texttt{Codebook} обратно
+            пропорциональна расстоянию между эмбеддингами.
     \end{itemize}
+
+    \end{columns}
 \end{frame}
 
-% \begin{frame}[noframenumbering, plain]{}
-% \end{frame}
+\begin{frame}[noframenumbering, plain]{\texttt{CodebookEnquirer}}
+    \framesubtitle{Результаты}
+        \begin{table}[htb]
+            \begin{tabular}{c c c}
+                \toprule
+                Выбор слов & Режим обучения & Точность\\
+                \midrule
+                случайный & \multirow{4}{4em}{$K = 5$\\$T = 3$} & 0.937 \\
+                \enquirer{} & & 0.982 \\
+                \texttt{CodebookEnquirer} & & 0.964\\
+                \texttt{CodebookEnquirer} (половина слов) & & 0.970\\
+                \midrule
+                случайный & \multirow{4}{4em}{$K = 20$\\$T = 2$} & 0.951 \\
+                \enquirer{} & & 0.989\\
+                \texttt{CodebookEnquirer} & & 0.990\\
+                \texttt{CodebookEnquirer} (половина слов) & & 0.980\\
+                \bottomrule
+            \end{tabular}
+            \caption{Точность идентификации, $K = 5$ дикторов, $T = 3$
+                     запрашиваемых слова}
+        \end{table}
+\end{frame}
 
+\begin{frame}[noframenumbering, plain]{Добавление шума}
+    \begin{itemize}
+        \item 6 различных вариантов шума из датасета MUSAN для каждого слова:
+        \texttt{rain}, \texttt{car}, \texttt{crowd}, \texttt{typing},
+        \texttt{hum}, \texttt{white} --- а также исходная чистая аудиозапись.
+        \item SNR 3~dB.
+        \item Тип шума не меняется в течение эпизода.
+    \end{itemize}
+
+    \begin{table}[htb]
+        \begin{tabular}{c c c}
+            \toprule
+            Модель & Идентификация & Верификация\\
+            \midrule
+            \guesser{} & 0.887 & 0.895\\
+            \guesser{} + \enquirer{} & 0.946 & 0.934\\
+            \guesser{} + эвристика (3 лучших) & 0.957 & 0.938\\
+            \bottomrule
+        \end{tabular}
+        \caption{Точность идентификации и верификации в стандартных режимах
+        ($T = 3$ слова, $K = 5$ гостей при идентификации)}
+    \end{table}
+\end{frame}
 \end{document}
