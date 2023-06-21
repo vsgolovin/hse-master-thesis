@@ -16,7 +16,7 @@ def get_figure_axes(xlabel, ylabel):
     ax = fig.gca()
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
-    ax.text(0.015, 0.91, "(а)", transform=ax.transAxes)
+    ax.text(0.015, 0.91, "(a)", transform=ax.transAxes)
     return fig, ax
 
 
@@ -24,9 +24,9 @@ def get_figure_axes(xlabel, ylabel):
 def guesser():
     df = pd.read_csv("data/word_sweep.csv")
     df_paper = pd.read_csv("data/word_sweep_paper.csv")
-    fig, ax = get_figure_axes(r"Количество запрашиваемых слов $T$",
-                              r"Точность Guesser ($K = 5$)")
-    ax.plot(df["T"], df["acc"], label="полученный результат")
+    fig, ax = get_figure_axes(r"Number of requested words $T$",
+                              r"Guesser accuracy ($K = 5$)")
+    ax.plot(df["T"], df["acc"], label="our results")
     ax.plot(df_paper["T"], df_paper["acc"], label="Seurin et al.")
     ax.legend()
     ax.set_xlim(-1, 21)
@@ -38,10 +38,10 @@ def guesser():
 
 @cli.command()
 def enquirer():
-    df_e = pd.read_csv("data/word_sweep_enquirer.csv")
+    df_e = pd.read_csv("data/word_sweep_enq_ee.csv")
     df_g = pd.read_csv("data/word_sweep.csv")
-    fig, ax = get_figure_axes(r"Количество запрашиваемых слов $T$",
-                              r"Точность SR Module ($K = 5$)")
+    fig, ax = get_figure_axes(r"Number of requested words $T$",
+                              r"SR Module accuracy ($K = 5$)")
     ax.plot(df_e["T"], df_e["acc"], label="Enquirer")
     ax.plot(df_g["T"], df_g["acc"], label="random agent")
     ax.legend()
@@ -54,12 +54,12 @@ def enquirer():
 
 @cli.command()
 def heuristic():
-    df_e = pd.read_csv("data/word_sweep_enquirer.csv")
+    df_e = pd.read_csv("data/word_sweep_enq_ee.csv")
     df_g = pd.read_csv("data/word_sweep_heuristic.csv")
-    fig, ax = get_figure_axes(r"Количество запрашиваемых слов $T$",
-                              r"Точность SR Module ($K = 5$)")
+    fig, ax = get_figure_axes(r"Number of requested words $T$",
+                              r"SR Module accuracy ($K = 5$)")
     ax.plot(df_e["T"], df_e["acc"], label="Enquirer")
-    ax.plot(df_g["T"], df_g["acc"], label="эвристика (детерм.)")
+    ax.plot(df_g["T"], df_g["acc"], label="heuristic")
     ax.legend()
     ax.set_xlim(-1, 16)
     ax.set_xticks(np.arange(0, 16, 5))

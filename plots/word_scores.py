@@ -42,7 +42,7 @@ def main():
     ax.set_xlim(0.88, 1.0)
     ax.set_xticks(np.arange(0.9, 1.01, 0.05))
     ax.set_xticks(np.arange(0.88, 1.01, 0.01), minor=True)
-    ax.set_xlabel(r"Точность ($K = 5$, $T = 3$)")
+    ax.set_xlabel(r"Accuracy ($K = 5$, $T = 3$)")
     fig.savefig("plots/word_scores.pdf")
 
 
