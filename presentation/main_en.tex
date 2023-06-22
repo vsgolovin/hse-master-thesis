@@ -34,7 +34,7 @@
         is the actual speaker.
     \end{enumerate}
 
-    In deep learning setting both these tasks boil down to comparing speaker
+    In deep learning setting both these tasks come down to comparing speaker
     and speech vector representations, which we will refer to as
     \alert{speaker} and \alert{word embeddings}.
 \end{frame}
@@ -50,8 +50,8 @@
         \item diverse prompts to avoid spoofing.
     \end{itemize}
 
-    \textbf{Proposal:} use Interactive Speaker Recognition approach introduced
-    in \vspace{1em}
+    \textbf{Proposal:} select requested words with a neural network trained
+    using reinforcement learning.\vspace{1em}
 
     \begin{quote}
         \normalfont{}
@@ -136,8 +136,9 @@
         \includegraphics[scale=\vimgscale]{../plots/guest_sweep.pdf}
     \end{columns}
 
-    Trained with supervised learning: speakers and words are sampled randomly,
-    model is trained to minimize cross-entropy.
+    Here and henceforth the models are trained with $K = 5$ speakers and
+    $T = 3$ requested words. \guesser{} is trained with supervised learning ---
+    speakers and requested words are randomly sampled.
 
     The difference is likely due to the increase in embedding size --- 512 vs
     128 in the original paper.
@@ -223,11 +224,11 @@
                 Agent & Training mode & Accuracy\\
                 \midrule
                 random & \multirow{3}{4em}{$K = 5$\newline$T = 3$} & 0.937 \\
-                \enquirer{} & & 0.982\\
+                Enquirer & & 0.982\\
                 heuristic & & 0.984\\
                 \midrule
                 random & \multirow{3}{4em}{$K = 20$\\$T = 2$} & 0.951 \\
-                \enquirer{} & & 0.989\\
+                Enquirer & & 0.989\\
                 heuristic & & 0.988\\
                 \bottomrule
             \end{tabular}
@@ -242,11 +243,11 @@
                 Agent & Training mode & Accuracy\\
                 \midrule
                 random & \multirow{3}{4em}{$T = 3$} & 0.895 \\
-                \enquirer{} & & 0.933\\
+                Enquirer & & 0.933\\
                 heuristic & & 0.917\\
                 \midrule
                 random & \multirow{3}{4em}{$T = 2$} & 0.913 \\
-                \enquirer{} & & 0.947\\
+                Enquirer & & 0.947\\
                 heuristic & & 0.945\\
                 \bottomrule
             \end{tabular}
